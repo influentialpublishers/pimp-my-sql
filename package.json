@@ -1,14 +1,14 @@
 {
-  "name": "ptsd",
+  "name": "pimp-my-sql",
   "version": "0.0.1",
-  "description": "Promise the SQL Dammit",
+  "description": "Pimp My SQL",
   "main": "index.js",
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/influentialpublishers/ptsd.git"
+    "url": "git+https://github.com/influentialpublishers/pimp-my-sql.git"
   },
   "keywords": [
     "promise",
@@ -19,7 +19,7 @@
   "author": "Nathan A Sculli <nsculli@influential.co>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/influentialpublishers/ptsd/issues"
+    "url": "https://github.com/influentialpublishers/pimp-my-sql/issues"
   },
-  "homepage": "https://github.com/influentialpublishers/ptsd#readme"
+  "homepage": "https://github.com/influentialpublishers/pimp-my-sql#readme"
 }
