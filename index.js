@@ -1,9 +1,10 @@
 
-const _                = require('ramda');
-const moment           = require('moment');
-const Bluebird         = require('bluebird');
-const { randomBytes }  = require('crypto');
-const { inspect }      = require('util');
+const _               = require('ramda');
+const moment          = require('moment');
+const Bluebird        = require('bluebird');
+const { randomBytes } = require('crypto');
+const { inspect }     = require('util');
+const jsonparse       = require('./lib/json-parse');
 
 
 const TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -175,7 +176,6 @@ const softCompoundDelete = _.curry((db, table, id) => {
 const select = _.curry((db, sql, params, no_cache = false) => {
 
   const runner    = no_cache ? queryNoCache : query;
-  const transform = _.identity
 
   //@TODO - implement the select transforms.
   /*
@@ -185,6 +185,10 @@ const select = _.curry((db, sql, params, no_cache = false) => {
   , JSONParse
   );
   */
+
+  const transform = _.compose(
+    jsonparse.transform
+  );
 
   return runner(db, sql, params)
 
