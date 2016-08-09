@@ -2,6 +2,6 @@
 
 module.exports = {
   Query: require('./lib/query')
-, Model: require('./lib/model')
+, Model: require('./lib/factory-model')
 , SqlFactory: require('./lib/factory-sql')
 };
