@@ -191,4 +191,38 @@ describe('Pimp My Sql :: Query', function() {
 
   });
 
+
+  describe('::getWhereParams', function() {
+
+
+    it('should assemble a query from the given options', () => {
+
+      const table      = 'test';
+      const projection = 'foo AS bar';
+      const params     = {
+        bar: 'baz'
+      , boo: 'bah'
+      };
+
+      testLib.query = sinon.stub().yields(null, [ { foo: 42 } ]);
+      testLib.escape = (x) => `'${x}'`;
+
+      const sql_string = `SELECT foo AS bar FROM \`test\` WHERE 1 `
+                       + ` AND bar = 'baz' `
+                       + ` AND boo = 'bah' `
+
+      return Query.getWhereParams(testLib, table, params, projection)
+
+      .then((result) => {
+
+        expect(result[0].foo).to.eql(42)
+        expect(testLib.query.calledOnce).to.be.true
+        expect(testLib.query.calledWith(sql_string, params)).to.be.true
+
+      });
+
+    });
+
+  });
+
 });
