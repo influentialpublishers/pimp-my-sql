@@ -1,7 +1,9 @@
 /*eslint-env node, mocha*/
-const { expect } = require('chai');
+const { expect, assert } = require('chai');
 const sinon      = require('sinon');
 const { Model }  = require('../../index');
+const Bluebird   = require('bluebird');
+const R          = require('ramda');
 
 describe('Pimp-My-Sql Model', function() {
 
@@ -124,5 +126,94 @@ const sqlGetById =
     });
 
   });
+
+  describe('::search', function() {
+
+    const map = {
+      starts_with: () => ({
+        join: 'JOIN `rah` ON `rag`.`id` = `foo`.`rah_id`'
+      })
+    }
+
+    it('should return no results', (done) => {
+
+      const params = {
+        page: undefined,
+        limit: undefined,
+        starts_with: undefined
+      }
+
+      const db = {
+        escape: R.identity,
+        query : (sql, params, callback) => {
+          if(sql.indexOf(' `temp`') == -1)
+            return callback(null, [])
+          else
+            return callback(null, [{count: 0}])
+        }
+      }
+
+      const expected = {
+        params: {
+          limit: 16,
+          offset: 0,
+          page: 1
+        },
+        rows: [],
+        count: 0
+      }
+
+      TestModel.search(map, db, params)
+      .then((results) => {
+        expect(results).to.eql(expected)
+        done()
+      })
+      .catch(done)
+
+    })
+
+    it('should generate search results', (done) => {
+
+      params = {
+        starts_with: 'asdf',
+        ends_with: 'fdsa'
+      }
+
+      query_results = [
+        {id: 1},
+        {id: 2},
+        {id: 3}
+      ]
+
+      db = {
+        escape: R.identity,
+        query : (sql, params, callback) => {
+          if(sql.indexOf(' `temp`') == -1)
+            return callback(null, query_results)
+          else
+            return callback(null, [{count: query_results.length}])
+        }
+      }
+
+      const expected = {
+        params: {
+          limit: 16,
+          offset: 0,
+          page: 1,
+          starts_with: 'asdf'
+        },
+        rows: query_results,
+        count: query_results.length
+      }
+
+      TestModel.search(map, db, params)
+        .then((results) => {
+          expect(results).to.eql(expected)
+          done()
+        })
+        .catch(done)
+    })
+
+  })
 
 });
