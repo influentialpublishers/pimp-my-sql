@@ -11,7 +11,10 @@ describe('lib/search.js', () => {
 
     it('should return default pagination params', (done) => {
 
-      const test = {}
+      const test = {
+        page: undefined,
+        limit: undefined
+      }
 
       const results = Search.parseParams({})(test)
 
@@ -77,9 +80,9 @@ describe('lib/search.js', () => {
       }
 
       const map = {
-        starts_with: {
+        starts_with: () => ({
           validation: []
-        }
+        })
       }
 
       const results = Search.parseParams(map)(test)
@@ -104,10 +107,10 @@ describe('lib/search.js', () => {
       }
 
       const map = {
-        starts_with: {
+        starts_with: () => ({
           validation: [],
           normalize: R.toUpper
-        }
+        })
       }
 
       const results = Search.parseParams(map)(test)

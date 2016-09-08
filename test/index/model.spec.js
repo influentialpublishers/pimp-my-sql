@@ -137,7 +137,11 @@ const sqlGetById =
 
     it('should return no results', (done) => {
 
-      const params = {}
+      const params = {
+        page: undefined,
+        limit: undefined,
+        starts_with: undefined
+      }
 
       const db = {
         escape: R.identity,
