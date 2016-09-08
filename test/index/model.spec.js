@@ -132,21 +132,7 @@ const sqlGetById =
     const map = {
       starts_with: () => ({
         join: 'JOIN `rah` ON `rag`.`id` = `foo`.`rah_id`'
-      }),
-
-      verified: () => ({
-        where: '`verified` = :verified'
-      }),
-
-      order_by: (params) => {
-        const param = params['order_by']
-        if(R.equals(param, 'date'))
-          return {
-            order: 'ORDER BY `date`'
-          }
-        else
-          return {}
-      }
+      })
     }
 
     it('should return no results', (done) => {
