@@ -37,8 +37,8 @@ const sqlGetById =
   ' \n' +
   'WHERE `test`.`deleted` <> 1\n' +
   ' AND `test`.`id` = ?  \n' +
-  'ORDER BY `test`.`id` DESC \n' +
-  'GROUP BY `test`.`id`'
+  'GROUP BY `test`.`id` \n' +
+  'ORDER BY `test`.`id` DESC'
 ;
 
   beforeEach(() => {

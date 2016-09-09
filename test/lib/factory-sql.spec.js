@@ -58,7 +58,8 @@ describe('SQL Factory-Factory', function() {
       'FROM `test` \n' +
       ' \n' +
       'WHERE 1 \n' +
-      'ORDER BY `foo`.`id` \n'
+      ' \n' +
+      'ORDER BY `foo`.`id`'
     ;
 
     expect(actual).to.eql(expected);
@@ -112,10 +113,10 @@ describe('SQL Factory-Factory', function() {
       ' \n' +
       'WHERE `test`.`deleted` <> 1 \n' +
       'AND `test`.`id` = ? \n' +
-      'ORDER BY `test`.`id` ASC \n' +
-      ',`test`.`created` DESC \n' +
       'GROUP BY `test`.`id` \n' +
-      ',`test`.`created`'
+      ',`test`.`created` \n' +
+      'ORDER BY `test`.`id` ASC \n' +
+      ',`test`.`created` DESC'
 
     expect(actual).to.eql(expected);
 
