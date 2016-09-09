@@ -254,7 +254,7 @@ describe('lib/search.js', () => {
 
       const expected = {
         select: 'SELECT `starts` FROM `start`, `ends` FROM `ending`',
-        join: 'JOIN `start` ON `start`.`id` IS NOT NULL ',
+        join: 'JOIN `start` ON `start`.`id` IS NOT NULL',
         where: ' AND `start`.`deleted` IS NULL AND `ending`.`deleted` IS NULL'
       }
 
