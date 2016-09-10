@@ -12,7 +12,7 @@ describe('lib/search.js', () => {
     it('should return default pagination params', (done) => {
 
       const test = {
-        page: undefined,
+        page : undefined,
         limit: undefined
       }
 
@@ -20,8 +20,8 @@ describe('lib/search.js', () => {
 
       const expected = {
         offset: 0,
-        limit: 16,
-        page: 1
+        limit : 16,
+        page  : 1
       }
 
       expect(results).to.eql(expected)
@@ -33,7 +33,7 @@ describe('lib/search.js', () => {
     it('should return offset of 24', (done) => {
 
       const test = {
-        page: 3,
+        page : 3,
         limit: 12
       }
 
@@ -41,8 +41,8 @@ describe('lib/search.js', () => {
 
       const expected = {
         offset: 24,
-        limit: 12,
-        page: 3
+        limit : 12,
+        page  : 3
       }
 
       expect(results).to.eql(expected)
@@ -63,8 +63,8 @@ describe('lib/search.js', () => {
 
       const expected = {
         offset: 0,
-        limit: 16,
-        page: 1
+        limit : 16,
+        page  : 1
       }
 
       expect(results).to.eql(expected)
@@ -88,9 +88,9 @@ describe('lib/search.js', () => {
       const results = Search.parseParams(map)(test)
 
       const expected = {
-        offset: 0,
-        limit: 16,
-        page: 1,
+        offset     : 0,
+        limit      : 16,
+        page       : 1,
         starts_with: 'asdf'
       }
 
@@ -99,6 +99,10 @@ describe('lib/search.js', () => {
       done()
 
     })
+
+  })
+
+  describe('::normalizeParams', () => {
 
     it('should return with normalized starts_with param', (done) => {
 
@@ -113,12 +117,9 @@ describe('lib/search.js', () => {
         })
       }
 
-      const results = Search.parseParams(map)(test)
+      const results = Search.normalizeParams(map)(test)
 
       const expected = {
-        offset: 0,
-        limit: 16,
-        page: 1,
         starts_with: 'ASDF'
       }
 
