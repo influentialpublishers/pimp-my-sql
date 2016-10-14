@@ -1,6 +1,6 @@
 {
   "name": "pimp-my-sql",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Pimp My SQL",
   "main": "index.js",
   "scripts": {

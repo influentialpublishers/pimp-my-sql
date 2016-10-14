@@ -1,7 +1,6 @@
+/*eslint-env node, mocha */
 const R           = require('ramda');
 const { expect }  = require('chai');
-const { inspect } = require('util');
-const sinon       = require('sinon');
 const Search = require('../../lib/search.js')
 
 
@@ -132,21 +131,21 @@ describe('lib/search.js', () => {
   })
 
 
-  describe('::addPagination', (done) => {
+  describe('::addPagination', () => {
 
     it('should interpolate limit clause', (done) => {
 
-      db = {
+      let db = {
         escape: R.identity
       }
 
-      params = {
+      let params = {
         offset: 24,
         limit: 12,
         page: 1
       }
 
-      expected = 'QUERY LIMIT 24, 12'
+      let expected = 'QUERY LIMIT 24, 12'
 
       const results = Search.addPagination(db, 'QUERY', params)
 
@@ -158,9 +157,41 @@ describe('lib/search.js', () => {
   })
 
 
-  describe('::getClauses', (done) => {
+  describe('::getClauses', () => {
 
-    it('should return clauses', (done) => {
+    it('should return clauses when we have no joins', (done) => {
+
+      const map = {
+        starts_with: () => ({
+          normalize: R.identity,
+          select: '`starts` FROM `start`',
+          where: ' AND `start`.`deleted` IS NULL'
+        }),
+        ends_with: () => ({
+          normalize: R.identity,
+          select: '`ends` FROM `ending`',
+          where: ' AND `ending`.`deleted` IS NULL'
+        })
+      }
+
+      const params = {
+        'starts_with': 'asdf'
+      }
+
+      const expected = {
+        select: '`starts` FROM `start`',
+        where: ' AND `start`.`deleted` IS NULL'
+      }
+
+      const results = Search.getClauses(map, params)
+
+      expect(results).to.eql(expected)
+
+      done()
+
+    })
+
+    it('should return clauses when we have joins', (done) => {
 
       const map = {
         starts_with: () => ({
@@ -269,7 +300,7 @@ describe('lib/search.js', () => {
 
   })
 
-  describe('::getCountSql', (done) => {
+  describe('::getCountSql', () => {
 
     it('should build a query to grab the count', (done) => {
 
