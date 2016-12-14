@@ -226,10 +226,10 @@ describe('Pimp My Sql :: Query', function() {
   });
 
 
-  describe('::hardDelete', () => {
+  describe('::deleteById', () => {
 
 
-    it('should replace table name and parameter in delete query', () => {
+    it('should replace table name and where parameter in delete query', () => {
       testLib.query = sinon.stub().yields(null, true);
 
       const table = 'test';
@@ -237,7 +237,7 @@ describe('Pimp My Sql :: Query', function() {
       const params = [id];
       const expected_sql = 'DELETE FROM `test` WHERE `test`.`id` = ? ';
 
-      return Query.hardDelete(testLib, table, id)
+      return Query.deleteById(testLib, table, id)
 
       .then((result) => {
         expect(result).to.be.true;
