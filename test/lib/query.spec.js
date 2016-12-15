@@ -24,7 +24,7 @@ describe('Pimp My Sql :: Query', function() {
       Query.run(testLib, sql, params)
 
       .then((result) => {
-        
+
         expect(result).to.eql('foo');
         expect(testLib.query.calledOnce).to.be.true;
         expect(testLib.query.calledWith('bar','blah')).to.be.true;
@@ -224,5 +224,29 @@ describe('Pimp My Sql :: Query', function() {
     });
 
   });
+
+
+  describe('::deleteById', () => {
+
+
+    it('should replace table name and where parameter in delete query', () => {
+      testLib.query = sinon.stub().yields(null, true);
+
+      const table = 'test';
+      const id = '1'
+      const params = [id];
+      const expected_sql = 'DELETE FROM `test` WHERE `test`.`id` = ? ';
+
+      return Query.deleteById(testLib, table, id)
+
+      .then((result) => {
+        expect(result).to.be.true;
+        expect(testLib.query.calledOnce).to.be.true;
+        expect(testLib.query.calledWith(expected_sql, params)).to.be.true;
+
+      })
+
+    })
+  })
 
 });
