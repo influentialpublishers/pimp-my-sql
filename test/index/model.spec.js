@@ -1,8 +1,7 @@
 /*eslint-env node, mocha*/
-const { expect, assert } = require('chai');
+const { expect } = require('chai');
 const sinon      = require('sinon');
 const { Model }  = require('../../index');
-const Bluebird   = require('bluebird');
 const R          = require('ramda');
 
 describe('Pimp-My-Sql Model', function() {
@@ -125,6 +124,63 @@ const sqlGetById =
 
     });
 
+    it('should pass the given current object to the update method',
+    function() {
+
+      const expected = 'MY_EXPECTED_VALUE'
+      const current = { id: 42, name: 'foo', actual: expected }
+      const request = { name: 'boo' }
+      const expected_update_params = [ request, 42 ]
+      const matcher = sinon.match(
+        /UPDATE `TEST` SET \? WHERE `TEST`.`id` = \? -- /
+      )
+
+      const query = sinon.stub()
+
+      query
+        .withArgs(matcher, expected_update_params)
+        .yields(null, { affectedRows: 1 })
+
+      query
+        .withArgs(sinon.match(/SELECT/), [ 42 ])
+        .yields(null, [{ id: 42, name: 'boo' }])
+
+
+      const db = { query }
+
+
+      function preUpdate(sql_factory, conn, current) {
+  
+        expect(current.actual).to.eql(expected)      
+
+        return function preUpdateImpl(request) {
+
+          return request
+
+        }
+
+      }
+
+
+      const MyModel = Model({
+        table: 'TEST'
+      , sql: TestSql
+      , intercepts: { preUpdate }
+      })
+
+
+      return MyModel.save(db, request, current)
+
+      .then((test_model) => {
+
+        expect(test_model.id).to.eql(42)
+        expect(test_model.name).to.eql('boo')
+
+      })
+
+
+    })
+
   });
 
   describe('::search', function() {
@@ -174,18 +230,18 @@ const sqlGetById =
 
     it('should generate search results', (done) => {
 
-      params = {
+      const params = {
         starts_with: 'asdf',
         ends_with: 'fdsa'
       }
 
-      query_results = [
+      const query_results = [
         {id: 1},
         {id: 2},
         {id: 3}
       ]
 
-      db = {
+      const db = {
         escape: R.identity,
         query : (sql, params, callback) => {
           if(sql.indexOf(' `temp`') == -1)
