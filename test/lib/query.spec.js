@@ -115,6 +115,50 @@ describe('Pimp My Sql :: Query', function() {
   });
 
 
+  describe('::bulkInsert', function() {
+
+    it('should create a bulk insert query based on the table and params',
+    () => {
+
+      const surround = (char, x) => char + x + char;
+      const surround_all = (char, x) => x.map(surround.bind(null, char));
+        
+
+      testLib.escapeId = x => surround('`', x);
+      testLib.escape = x =>
+        x.map(y => '(' + surround_all("'", y).join(',') + ')')
+        .join(',');
+
+
+      const table = 'test';
+      const params = [
+        { foo: 'bar', baz: 'moo' },
+        { foo: 'bar', baz: 'buzz' }
+      ];
+      const expected_sql =
+        'INSERT INTO `test` (`foo`,`baz`) VALUES ' +
+        "('bar','moo'),('bar','buzz')";
+      const sql_matcher  = sinon.match(expected_sql);
+
+
+      testLib.query = sinon.stub().yields(null, { insertId: 42 });
+
+
+      return Query.bulkInsert(testLib, table, params)
+
+      .then(insertId => {
+
+        expect(insertId).to.eql(42);
+        expect(testLib.query.calledOnce).to.be.true;
+        expect(testLib.query.calledWith(sql_matcher, [])).to.be.true;
+
+      })
+
+    })
+
+  });
+
+
   describe('::rawInsert', function() {
 
     it('should return the last insert identifier', () => {
