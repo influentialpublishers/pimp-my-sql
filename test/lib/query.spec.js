@@ -313,6 +313,24 @@ describe('Pimp My Sql :: Query', function() {
 
     })
 
+    it('should return a proper date and time for a unix timestamp in ms', () => {
+
+      const input = 1515188138000
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('2018-01-05 13:35:38');
+
+    })
+
+    it('should return a proper date and time for a string of a unix timestamp in ms', () => {
+
+      const input = '1515188138000'
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('2018-01-05 13:35:38');
+
+    })
+
     it('should return a proper date and time for a moment value', () => {
 
       const input = moment('2017-07-07 13:07:07')
@@ -361,7 +379,6 @@ describe('Pimp My Sql :: Query', function() {
       }
 
     })
-
 
     it('should return null for null input', () => {
 
