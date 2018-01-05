@@ -352,9 +352,13 @@ describe('Pimp My Sql :: Query', function() {
     it('should return null for an incorrectly typed out date', () => {
 
       const input = 'June 17th, 2017'
-      const result = Query.getTimestamp(input)
+      const error = new Error('Invalid Input')
 
-      expect(result).to.eql(null);
+      try {
+        Query.getTimestamp(input)
+      } catch (err) {
+        expect(err).to.eql(error)
+      }
 
     })
 
@@ -368,12 +372,16 @@ describe('Pimp My Sql :: Query', function() {
 
     })
 
-    it('should return null for garbage input', () => {
+    it('should throw an error for garbage input', () => {
 
       const input = 'thisisgarbageinput'
-      const result = Query.getTimestamp(input)
+      const error = new Error('Invalid Input')
 
-      expect(result).to.eql(null);
+      try {
+        Query.getTimestamp(input)
+      } catch (err) {
+        expect(err).to.eql(error)
+      }
 
     })
 
