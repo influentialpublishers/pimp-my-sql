@@ -340,6 +340,15 @@ describe('Pimp My Sql :: Query', function() {
 
     })
 
+    it('should return 1969-12-31 16:00:00 for an empty string', () => {
+
+      const input = ''
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('1969-12-31 16:00:00');
+
+    })
+
     it('should return null for an incorrectly typed out date', () => {
 
       const input = 'June 17th, 2017'
@@ -361,7 +370,7 @@ describe('Pimp My Sql :: Query', function() {
 
     it('should return null for garbage input', () => {
 
-      const input = 'thisisgarbateinput'
+      const input = 'thisisgarbageinput'
       const result = Query.getTimestamp(input)
 
       expect(result).to.eql(null);
