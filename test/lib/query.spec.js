@@ -1,5 +1,6 @@
 /*eslint-env node, mocha */
 const R           = require('ramda');
+const moment      = require('moment');
 const { expect }  = require('chai');
 const { inspect } = require('util');
 const sinon       = require('sinon');
@@ -122,7 +123,7 @@ describe('Pimp My Sql :: Query', function() {
 
       const surround = (char, x) => char + x + char;
       const surround_all = (char, x) => x.map(surround.bind(null, char));
-        
+
 
       testLib.escapeId = x => surround('`', x);
       testLib.escape = x =>
@@ -291,6 +292,82 @@ describe('Pimp My Sql :: Query', function() {
       })
 
     })
+  })
+
+  describe('::getTimestamp', () => {
+    it('should return a proper date and time for a unix timestamp', () => {
+
+      const input = 1515188138
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('2018-01-05 13:35:38');
+
+    })
+
+    it('should return a proper date and time for a string of a unix timestamp', () => {
+
+      const input = '1515188138'
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('2018-01-05 13:35:38');
+
+    })
+
+    it('should return a proper date and time for a moment value', () => {
+
+      const input = moment('2017-07-07 13:07:07')
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('2017-07-07 13:07:07');
+
+    })
+
+    it('should return a proper date and time for a formatted date', () => {
+
+      const input = '12/31/2017'
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('2017-12-31 00:00:00');
+
+    })
+
+    it('should return a proper date and time for a typed out date', () => {
+
+      const input = 'January 20, 2017'
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql('2017-01-20 00:00:00');
+
+    })
+
+    it('should return null for an incorrectly typed out date', () => {
+
+      const input = 'June 17th, 2017'
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql(null);
+
+    })
+
+
+    it('should return null for null input', () => {
+
+      const nullInput = null
+      const result = Query.getTimestamp(nullInput)
+
+      expect(result).to.eql(null);
+
+    })
+
+    it('should return null for garbage input', () => {
+
+      const input = 'thisisgarbateinput'
+      const result = Query.getTimestamp(input)
+
+      expect(result).to.eql(null);
+
+    })
+
   })
 
 });
