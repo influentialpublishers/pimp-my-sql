@@ -6,6 +6,8 @@ const { inspect } = require('util');
 const sinon       = require('sinon');
 const Query       = require('../../lib/query');
 
+const TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
 let testLib = null;
 
 describe('Pimp My Sql :: Query', function() {
@@ -300,7 +302,9 @@ describe('Pimp My Sql :: Query', function() {
       const input = 1515188138
       const result = Query.getTimestamp(input)
 
-      expect(result).to.eql('2018-01-05 13:35:38');
+      const expected = moment.unix(input).format(TIMESTAMP_FORMAT)
+
+      expect(result).to.eql(expected);
 
     })
 
@@ -309,7 +313,9 @@ describe('Pimp My Sql :: Query', function() {
       const input = '1515188138'
       const result = Query.getTimestamp(input)
 
-      expect(result).to.eql('2018-01-05 13:35:38');
+      const expected = moment.unix(input).format(TIMESTAMP_FORMAT)
+
+      expect(result).to.eql(expected);
 
     })
 
@@ -318,7 +324,9 @@ describe('Pimp My Sql :: Query', function() {
       const input = 1515188138000
       const result = Query.getTimestamp(input)
 
-      expect(result).to.eql('2018-01-05 13:35:38');
+      const expected = moment(parseInt(input)).format(TIMESTAMP_FORMAT)
+
+      expect(result).to.eql(expected);
 
     })
 
@@ -327,7 +335,9 @@ describe('Pimp My Sql :: Query', function() {
       const input = '1515188138000'
       const result = Query.getTimestamp(input)
 
-      expect(result).to.eql('2018-01-05 13:35:38');
+      const expected = moment(parseInt(input)).format(TIMESTAMP_FORMAT)
+
+      expect(result).to.eql(expected);
 
     })
 
@@ -363,7 +373,9 @@ describe('Pimp My Sql :: Query', function() {
       const input = ''
       const result = Query.getTimestamp(input)
 
-      expect(result).to.eql('1969-12-31 16:00:00');
+      const expected = moment.unix(input).format(TIMESTAMP_FORMAT)
+
+      expect(result).to.eql(expected);
 
     })
 
