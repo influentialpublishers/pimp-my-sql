@@ -297,7 +297,7 @@ describe('Pimp My Sql :: Query', function() {
   })
 
   describe('::getTimestamp', () => {
-    it('should return a proper date and time for a unix timestamp', () => {
+    it('should return a proper date and time for a unix timestamp in seconds', () => {
 
       const input = 1515188138
       const result = Query.getTimestamp(input)
@@ -308,7 +308,7 @@ describe('Pimp My Sql :: Query', function() {
 
     })
 
-    it('should return a proper date and time for a string of a unix timestamp', () => {
+    it('should return a proper date and time for a string of a unix timestamp in seconds', () => {
 
       const input = '1515188138'
       const result = Query.getTimestamp(input)
@@ -319,23 +319,23 @@ describe('Pimp My Sql :: Query', function() {
 
     })
 
-    it('should return a proper date and time for a unix timestamp in ms', () => {
+    it('should return a improper date and time for a unix timestamp in ms', () => {
 
       const input = 1515188138000
       const result = Query.getTimestamp(input)
 
-      const expected = moment(parseInt(input)).format(TIMESTAMP_FORMAT)
+      const expected = moment.unix(input).format(TIMESTAMP_FORMAT)
 
       expect(result).to.eql(expected);
 
     })
 
-    it('should return a proper date and time for a string of a unix timestamp in ms', () => {
+    it('should return a improper date and time for a string of a unix timestamp in ms', () => {
 
       const input = '1515188138000'
       const result = Query.getTimestamp(input)
 
-      const expected = moment(parseInt(input)).format(TIMESTAMP_FORMAT)
+      const expected = moment.unix(input).format(TIMESTAMP_FORMAT)
 
       expect(result).to.eql(expected);
 
